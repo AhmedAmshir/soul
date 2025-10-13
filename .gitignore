@@ -1,0 +1,36 @@
+# Laravel core directories
+/vendor
+/node_modules
+
+# Laravel storage (except public storage assets)
+storage/*
+!storage/app/public
+!storage/framework/cache/data
+!storage/logs
+public/storage
+
+# Laravel environment files
+.env
+.env.backup
+.env.*
+
+# Laravel IDE helper & local configs
+.phpstorm.meta.php
+_ide_helper.php
+_ide_helper_models.php
+.idea/
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Composer & npm logs
+composer.lock
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Cache and build outputs
+/.phpunit.re

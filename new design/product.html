@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Diffuser - Soul</title>
+    <meta name="description" content="Premium ultrasonic essential oil diffuser with multiple scent variants. Choose from Lavender, Eucalyptus, Vanilla, and Citrus blends.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">Soul</a>
+                
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9,22 9,12 15,12 15,22"/>
+                        </svg>
+                        Home
+                    </a>
+                    <a href="product.html" class="nav-link active">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="m7.5 4.27 9 5.15"/>
+                            <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+                        </svg>
+                        Product
+                    </a>
+                </div>
+
+                <a href="cart.html" class="cart-btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+                        <path d="M3 6h18"/>
+                        <path d="M16 10a4 4 0 0 1-8 0"/>
+                    </svg>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Section -->
+    <section class="product-section">
+        <div class="container">
+            <div class="product-grid">
+                <!-- Product Image -->
+                <div class="product-image">
+                    <img id="selectedImage" src="src/assets/soul-diffuser.jpg" alt="Soul Premium Essential Oil Diffuser" />
+                </div>
+
+                <!-- Product Details -->
+                <div class="product-details">
+                    <h1>Soul Premium Essential Oil Diffuser</h1>
+                    <p class="product-price">$89.99</p>
+                    
+                    <div class="product-description">
+                        <p>Transform your space with the Soul premium ultrasonic essential oil diffuser. This elegant device combines modern design with ancient aromatherapy practices to create the perfect ambiance for relaxation, meditation, or productivity.</p>
+                        
+                        <h3>Features:</h3>
+                        <ul>
+                            <li>Ultrasonic technology for optimal oil dispersion</li>
+                            <li>7-color LED lighting with auto-cycle or fixed options</li>
+                            <li>Timer settings: 1H, 3H, 6H, or continuous</li>
+                            <li>Auto shut-off when water runs low</li>
+                            <li>Whisper-quiet operation (less than 35dB)</li>
+                            <li>300ml capacity for up to 8 hours of use</li>
+                        </ul>
+                    </div>
+
+                    <!-- Scent Selection -->
+                    <div class="scent-selection">
+                        <h3>Choose Your Scent:</h3>
+                        <div class="scent-grid">
+                            <div class="scent-option active" data-scent="lavender" data-image="src/assets/soul-diffuser.jpg">
+                                <div class="scent-image">
+                                    <img src="src/assets/soul-diffuser.jpg" alt="Soul Lavender Diffuser" />
+                                </div>
+                                <div class="scent-info">
+                                    <h4>Lavender Dreams</h4>
+                                    <p>Calming & Relaxing</p>
+                                </div>
+                            </div>
+                            
+                            <div class="scent-option" data-scent="eucalyptus" data-image="src/assets/soul-diffuser.jpg">
+                                <div class="scent-image">
+                                    <img src="src/assets/soul-diffuser.jpg" alt="Soul Eucalyptus Diffuser" />
+                                </div>
+                                <div class="scent-info">
+                                    <h4>Eucalyptus Fresh</h4>
+                                    <p>Energizing & Purifying</p>
+                                </div>
+                            </div>
+                            
+                            <div class="scent-option" data-scent="vanilla" data-image="src/assets/soul-diffuser.jpg">
+                                <div class="scent-image">
+                                    <img src="src/assets/soul-diffuser.jpg" alt="Soul Vanilla Diffuser" />
+                                </div>
+                                <div class="scent-info">
+                                    <h4>Vanilla Comfort</h4>
+                                    <p>Warm & Comforting</p>
+                                </div>
+                            </div>
+                            
+                            <div class="scent-option" data-scent="citrus" data-image="src/assets/soul-diffuser.jpg">
+                                <div class="scent-image">
+                                    <img src="src/assets/soul-diffuser.jpg" alt="Soul Citrus Diffuser" />
+                                </div>
+                                <div class="scent-info">
+                                    <h4>Citrus Burst</h4>
+                                    <p>Uplifting & Refreshing</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quantity and Add to Cart -->
+                    <div class="product-actions">
+                        <div class="quantity-selector">
+                            <label for="quantity">Quantity:</label>
+                            <div class="quantity-controls">
+                                <button type="button" onclick="decreaseQuantity()">-</button>
+                                <input type="number" id="quantity" value="1" min="1" max="10">
+                                <button type="button" onclick="increaseQuantity()">+</button>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-lg add-to-cart-btn" onclick="addToCart()">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>

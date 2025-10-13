@@ -1,0 +1,54 @@
+services:
+    soul-php:
+        container_name: soul_php_container
+        build: build/php-fpm
+        expose:
+            - '9000'
+        volumes:
+            - .:/var/www/html/soul
+        networks:
+            - soul
+        depends_on:
+            - soul-db
+        restart: always
+    soul-nginx:
+        build: build/nginx
+        container_name: soul_nginx_container    
+        restart: always
+        ports:
+            - "8084:80"
+        volumes:
+            - .:/var/www/html/soul
+            - ./build/nginx/sites-enabled:/etc/nginx/sites-enabled
+        networks:
+            - soul
+    soul-db:
+        container_name: soul_mysql_container
+        image: mysql:8.0.27
+        environment:
+            - MYSQL_DATABASE=soul
+            - MYSQL_ROOT_PASSWORD=soul123
+            - MYSQL_PASSWORD=soul123
+        networks:
+            - soul
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./mysql:/var/lib/mysql
+        command: '--default-authentication-plugin=mysql_native_password'
+        restart: always
+    soul-phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: soul_myadmin_container
+        depends_on:
+            - soul-db
+        restart: always
+        ports:
+            - "8083:80"
+        environment:
+            - PMA_ARBITRARY=1
+        networks:
+            - soul
+networks:
+   soul:
+    driver: bridge
