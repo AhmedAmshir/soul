@@ -1,6 +1,7 @@
 # Laravel core directories
 /vendor
 /node_modules
+/new design
 
 # Laravel storage (except public storage assets)
 storage/*
