@@ -2,6 +2,7 @@
 /vendor
 /node_modules
 /new design
+/mysql
 
 # Laravel storage (except public storage assets)
 storage/*

@@ -67,7 +67,7 @@
                                 </div>
                             </div>
                             <div class="product-info">
-                                <h3>{{ $variation->smell }}</h3>
+                                <h3>{{ $variation->name }}</h3>
                                 <p>{{ $variation->description }}</p>
                                 <div class="product-price">E£ {{ number_format($variation->price, 0) }}</div>
                             </div>

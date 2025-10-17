@@ -4666,3 +4666,124 @@ img {
         font-size: 13px;
     }
 }
+
+/* FAQ Section Styles */
+.faq-section {
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-xl) 0;
+    background: var(--background);
+}
+
+.faq-title {
+    text-align: left;
+    font-size: var(--font-size-3xl);
+    font-weight: 600;
+    color: var(--foreground);
+    margin-bottom: 10px;
+}
+
+.faq-container {
+    margin: 0;
+}
+
+.faq-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: var(--spacing-sm);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.faq-item:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    background: var(--card);
+    border: none;
+    width: 100%;
+    text-align: left;
+    transition: var(--transition);
+}
+
+.faq-question:hover {
+    background: var(--secondary);
+}
+
+.faq-question h3 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--foreground);
+    flex: 1;
+}
+
+.faq-icon {
+    font-size: var(--font-size-xl);
+    font-weight: bold;
+    color: var(--accent);
+    transition: var(--transition);
+    min-width: 24px;
+    text-align: center;
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+    background: var(--muted);
+    display: none;
+}
+
+.faq-answer p {
+    margin: 0;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--muted-foreground);
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+    max-height: 200px;
+}
+
+/* Mobile Responsive FAQ */
+@media (max-width: 768px) {
+    .faq-section {
+        padding: var(--spacing-lg) 0;
+    }
+    
+    .faq-title {
+        font-size: var(--font-size-2xl);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .faq-container {
+        padding: 0 var(--spacing-sm);
+    }
+    
+    .faq-question {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    
+    .faq-question h3 {
+        font-size: var(--font-size-base);
+    }
+    
+    .faq-answer p {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: var(--font-size-sm);
+    }
+}

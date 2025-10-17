@@ -59,7 +59,7 @@ class CartController extends Controller {
                         'quantity' => $item->quantity,
                         'name' => $item->variation->product->name,
                         'price' => $item->variation->price,
-                        'smell' => $item->variation->smell,
+                        'name' => $item->variation->name,
                         'size_ml' => $item->variation->size_ml,
                         'description' => $item->variation->description,
                         'asin' => $item->variation->asin,
