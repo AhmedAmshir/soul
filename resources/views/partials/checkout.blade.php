@@ -327,12 +327,12 @@
                             @foreach($cartItems as $item)
                                 <div class="order-item">
                                     <div class="order-item-image">
-                                            <img src="{{ asset('storage/products/' . $item['image']) }}" alt="{{ $item['smell'] }}" />
+                                            <img src="{{ asset('storage/products/' . $item['image']) }}" alt="{{ $item['product_name'] }}" />
                                             <div class="item-quantity-badge">{{ $item['quantity'] }}</div>
                                         </div>
                                         <div class="order-item-details">
-                                            <h4 class="item-name">{{ $item['smell'] }}</h4>
-                                            <p class="item-specs">{{ $item['size_ml'] }}ml • Premium Quality</p>
+                                            <h4 class="item-name">{{ $item['product_name'] }}</h4>
+                                            <p class="item-specs">{{ $item['size_ml'] }}ml • {{ $item['smell'] }}</p>
                                             <div class="item-price">E£ {{ number_format($item['price'] * $item['quantity'], 0) }}</div>
                                     </div>
                                 </div>

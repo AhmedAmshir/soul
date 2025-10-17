@@ -75,7 +75,7 @@
                                     
                                     <div class="cart-item-details">
                                         <div class="item-header">
-                                            <h3 class="item-name">{{ $item['smell'] }}</h3>
+                                            <h3 class="item-name">{{ $item['product_name'] }}</h3>
                                             <button class="remove-item-btn" onclick="removeFromCart('{{ $itemId }}')" aria-label="Remove item">
                                                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                     <path d="M18 6L6 18"/>
@@ -84,7 +84,7 @@
                                             </button>
                                         </div>
                                         
-                                        <p class="item-description">{{ $item['description'] }}</p>
+                                        <p class="item-description">{{ $item['smell'] }}</p>
                                         
                                         <!-- <div class="item-specs">
                                             <span class="spec-item">
