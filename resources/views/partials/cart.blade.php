@@ -84,7 +84,7 @@
                                             </button>
                                         </div>
                                         
-                                        <p class="item-description">{{ $item['smell'] }}</p>
+                                        <!-- <p class="item-description">{{ $item['smell'] }}</p> -->
                                         
                                         <!-- <div class="item-specs">
                                             <span class="spec-item">
@@ -105,7 +105,8 @@
                                         
                                         <div class="item-price-section">
                                             <div class="price-info">
-                                                <span class="price-label">Price per unit:</span>
+                                                <span class="item-description">{{ $item['smell'] }}</span>
+                                                <!-- <span class="price-label">Price per unit:</span> -->
                                                 <span class="item-price">E£ {{ number_format($item['price'], 0) }}</span>
                                             </div>
                                             <div class="total-price">

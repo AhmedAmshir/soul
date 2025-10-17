@@ -194,6 +194,12 @@ function updateCartQuantity(productId, newQuantity) {
                     quantityInput.value = data.item_quantity;
                 }
                 
+                // Update individual item total
+                const itemTotalElement = document.querySelector(`span[data-item-id="${productId}"]`);
+                if (itemTotalElement && data.item_total_price) {
+                    itemTotalElement.textContent = `E£ ${Math.round(data.item_total_price)}`;
+                }
+                
                 // Update cart summary with server data
                 const subtotalElement = document.getElementById('subtotal');
                 const totalElement = document.getElementById('total');
