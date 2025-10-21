@@ -107,7 +107,7 @@ img {
 }
 
 .logo-img {
-    height: 2.5rem;
+    height: 60px;
     width: auto;
     transition: var(--transition);
     border-radius: 5px;
