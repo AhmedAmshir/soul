@@ -50,7 +50,7 @@
                     <tbody>
                         @foreach($order->items as $item)
                             <tr>
-                                <td>{{ $item->variation->product->name }} - {{ $item->variation->description }}</td>
+                                <td>{{ $item->variation->name }} - {{ $item->variation->smell }}</td>
                                 <td>{{ $item->quantity }}</td>
                                 <td>E£{{ number_format($item->price, 0) }}</td>
                                 <td>E£{{ number_format($item->quantity * $item->price, 0) }}</td>
