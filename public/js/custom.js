@@ -645,8 +645,41 @@ function initCheckoutPage() {
     console.log('Checkout page initialized successfully');
 }
 
+// Initialize thumbnail gallery functionality on product page
+function initThumbnailGallery() {
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const mainImage = document.getElementById('mainProductImage');
+    
+    if (thumbnails.length > 0 && mainImage) {
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Get the thumbnail div (in case click is on the img inside)
+                const thumbnailDiv = e.target.closest('.thumbnail') || this;
+                
+                // Remove active class from all thumbnails
+                thumbnails.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked thumbnail
+                thumbnailDiv.classList.add('active');
+                
+                // Update main image - use getAttribute for better compatibility
+                const imageSrc = thumbnailDiv.getAttribute('data-image');
+                if (imageSrc && mainImage) {
+                    mainImage.src = imageSrc;
+                }
+            });
+        });
+    }
+}
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize thumbnail gallery if on product page
+    initThumbnailGallery();
+    
     if (window.location.pathname.includes('checkout')) {
         initCheckoutPage();
     }

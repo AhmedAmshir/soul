@@ -41,6 +41,9 @@
                         <div class="thumbnail" data-image="{{ asset('storage/products/bottle-side-3.png') }}">
                             <img src="{{ asset('storage/products/bottle-side-3.png') }}" alt="Amber Diffuser" />
                         </div>
+                        <div class="thumbnail" data-image="{{ asset('storage/products/bottle-side-4.png') }}">
+                            <img src="{{ asset('storage/products/bottle-side-4.png') }}" alt="Amber Diffuser" />
+                        </div>
                     </div>
                 </div>
 

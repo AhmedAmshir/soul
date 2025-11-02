@@ -2932,6 +2932,10 @@ img {
     .cart-item-actions {
         justify-content: center;
     }
+
+    .main-image {
+        height: 350px;
+    }
 }
 
 /* Order Confirmation Styles */

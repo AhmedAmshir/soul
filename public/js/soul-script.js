@@ -469,16 +469,24 @@ function initProductPageNew() {
     
     if (thumbnails.length > 0 && mainImage) {
         thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', function() {
+            thumbnail.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Get the thumbnail div (in case click is on the img inside)
+                const thumbnailDiv = e.target.closest('.thumbnail') || this;
+                
                 // Remove active class from all thumbnails
                 thumbnails.forEach(t => t.classList.remove('active'));
                 
                 // Add active class to clicked thumbnail
-                this.classList.add('active');
+                thumbnailDiv.classList.add('active');
                 
-                // Update main image
-                const imageSrc = this.dataset.image;
-                mainImage.src = imageSrc;
+                // Update main image - use getAttribute for better compatibility
+                const imageSrc = thumbnailDiv.getAttribute('data-image');
+                if (imageSrc && mainImage) {
+                    mainImage.src = imageSrc;
+                }
             });
         });
     }
