@@ -68,7 +68,7 @@
                             </div>
                             <div class="product-info">
                                 <h3>{{ $variation->name }}</h3>
-                                <p>{{ $variation->description }}</p>
+                                <p>{!! $variation->description !!}</p>
                                 <div class="product-price">E£ {{ number_format($variation->price, 0) }}</div>
                             </div>
                         </div>

@@ -503,6 +503,7 @@ img {
 .product-info p {
     color: var(--muted-foreground);
     margin-bottom: var(--spacing-sm);
+    text-align: justify;
 }
 
 .product-price {
@@ -542,6 +543,7 @@ img {
 
 .feature-card p {
     color: var(--muted-foreground);
+    text-align: justify;
 }
 
 /* CTA Section */

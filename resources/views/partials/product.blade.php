@@ -64,7 +64,7 @@
                                 <span id="selectedQuantity">1</span> Selected
                             </div> -->
                         </div>
-                        <p id="selectedScentDescription">{{ $variation->description }}</p>
+                        <p id="selectedScentDescription">{!! $variation->description !!}</p>
                     </div>
 
                     <!-- Quantity and Add to Cart -->
