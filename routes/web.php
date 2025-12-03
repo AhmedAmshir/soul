@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CouponController;
 
 Route::get('/', function () {
     return redirect()->route('homepage');
@@ -24,6 +25,8 @@ Route::post('/cart/clear', [CartController::class, 'clearCart'])->name('cart.cle
 
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('cart.checkout');
 Route::post('/checkout/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+
+Route::post('/coupon/validate', [CouponController::class, 'validate'])->name('coupon.validate');
 
 Route::post('/place-order', [OrderController::class, 'placeOrder'])->name('order.place');
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');

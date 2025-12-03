@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Coupon;
+use App\Models\CouponUsage;
 use Illuminate\Http\Request;
 use App\Services\CartService;
+use App\Services\CouponService;
 use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -20,9 +23,11 @@ class OrderController extends Controller {
 
 
     protected $cartService;
+    protected $couponService;
 
-    public function __construct(CartService $cartService) {
+    public function __construct(CartService $cartService, CouponService $couponService) {
         $this->cartService = $cartService;
+        $this->couponService = $couponService;
     }
 
     public function index(Request $request) {
@@ -41,9 +46,32 @@ class OrderController extends Controller {
 
     public function show(Order $order) {
 
-        $order->load(['user', 'shippingAddress', 'items.variation.product']);
+        $order->load(['user', 'shippingAddress', 'items.variation.product', 'coupon']);
 
-        return view('orders.show', compact('order'));
+        // Check if coupon hasn't been used and should show notification
+        // Notification will appear on first order and continue on subsequent orders until coupon is used
+        $showCouponNotification = false;
+        $couponCode = null;
+
+        if ($order->shippingAddress) {
+            $phoneNumber = $order->shippingAddress->phone_number;
+
+            // Get the coupon code to send
+            $couponCode = $this->couponService->getCouponCodeToSend();
+            
+            if ($couponCode) {
+                // Check if coupon has reached the maximum usage limit (250)
+                if (!$this->couponService->hasReachedUsageLimit($couponCode)) {
+                    // Check if coupon exists and hasn't been used by this phone number
+                    $coupon = Coupon::where('code', $couponCode)->first();
+                    if ($coupon && !$coupon->isUsedByPhone($phoneNumber)) {
+                        $showCouponNotification = true;
+                    }
+                }
+            }
+        }
+
+        return view('orders.show', compact('order', 'showCouponNotification', 'couponCode'));
     }
 
     public function updateStatus(Request $request, Order $order) {
@@ -69,10 +97,16 @@ class OrderController extends Controller {
             'apartment_suite' => 'nullable|string|max:255',
             'city' => 'required|string|max:255',
             'governorate' => 'required|string|max:255',
-            'postcode' => 'string|regex:/^[A-Za-z0-9\s\-]+$/', 
+            'postcode' => 'string|regex:/^[A-Za-z0-9\s\-]+$/',
+            'coupon_code' => 'nullable|string|max:50',
         ]);
 
         $cart = $this->cartService->getCartData();
+
+        $phoneNumber = trim($request->phone);
+        $phoneNumber = preg_replace('/[^\d+]/', '', $phoneNumber);
+        $phoneNumber = preg_replace('/^(\+2|2|\+20|20)/', '', $phoneNumber);
+        $phoneNumber = ltrim($phoneNumber, '+');
 
         DB::beginTransaction();
 
@@ -80,7 +114,7 @@ class OrderController extends Controller {
             $address = Address::create([
                 'user_id' => Auth::check() ? Auth::id() : null,
                 'full_name' => $request->name,
-                'phone_number' => $request->phone,
+                'phone_number' => $phoneNumber,
                 'email' => $request->email,
                 'address' => $request->shipping_address,
                 'city' => $request->city,
@@ -98,6 +132,31 @@ class OrderController extends Controller {
                 $totalPrice += $item['quantity'] * $item['price'];
             }
 
+            // Handle coupon if provided
+            $discountAmount = 0;
+            $couponId = null;
+            $subtotalAmount = $totalPrice;
+
+            if ($request->filled('coupon_code')) {
+                $couponResult = $this->couponService->calculateDiscount(
+                    $request->coupon_code,
+                    $phoneNumber,
+                    $totalPrice
+                );
+
+                if ($couponResult['success']) {
+                    $discountAmount = $couponResult['discount'];
+                    $couponId = $couponResult['coupon_id'];
+                } else {
+                    // Coupon validation failed, return error
+                    return redirect()->back()
+                        ->withInput()
+                        ->with('error', $couponResult['message']);
+                }
+            }
+
+            $finalTotal = $subtotalAmount - $discountAmount + 70; // Add shipping cost
+
             $order = Order::create([
                 'order_number' => 'SO' . Str::upper(Str::random(10)),
                 'user_id' => Auth::check() ? Auth::id() : null,
@@ -106,7 +165,10 @@ class OrderController extends Controller {
                 'shipping_method' => 'courier',
                 'shipping_cost' => 70,
                 'payment_method' => $request->payment_method,
-                'total_amount' => $totalPrice,
+                'subtotal_amount' => $subtotalAmount,
+                'discount_amount' => $discountAmount,
+                'coupon_id' => $couponId,
+                'total_amount' => $finalTotal,
             ]);
 
             foreach ($cart['cartItems'] as $itemVariation => $item) {
@@ -128,6 +190,17 @@ class OrderController extends Controller {
                 ]);
 
                 $variation->decrement('stock', $item['quantity']);
+            }
+
+            // Record coupon usage if coupon was applied
+            if ($couponId && $discountAmount > 0) {
+                CouponUsage::create([
+                    'coupon_id' => $couponId,
+                    'phone_number' => $phoneNumber,
+                    'order_id' => $order->id,
+                    'discount_amount' => $discountAmount,
+                    'used_at' => now(),
+                ]);
             }
 
             DB::commit();

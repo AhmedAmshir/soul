@@ -19,7 +19,17 @@ class Order extends Model
         'shipping_cost',
         'payment_method',
         'total_amount',
+        'subtotal_amount',
         'status',
+        'coupon_id',
+        'discount_amount',
+    ];
+
+    protected $casts = [
+        'shipping_cost' => 'decimal:2',
+        'total_amount' => 'decimal:2',
+        'subtotal_amount' => 'decimal:2',
+        'discount_amount' => 'decimal:2',
     ];
 
     public function user()
@@ -40,5 +50,15 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
+    }
+
+    public function couponUsage()
+    {
+        return $this->hasOne(CouponUsage::class);
     }
 }

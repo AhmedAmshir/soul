@@ -25,6 +25,7 @@ services:
     soul-db:
         container_name: soul_mysql_container
         image: mysql:8.0.27
+        platform: linux/amd64
         environment:
             - MYSQL_DATABASE=soul
             - MYSQL_ROOT_PASSWORD=soul123
@@ -40,6 +41,7 @@ services:
     soul-phpmyadmin:
         image: phpmyadmin/phpmyadmin
         container_name: soul_myadmin_container
+        platform: linux/amd64
         depends_on:
             - soul-db
         restart: always

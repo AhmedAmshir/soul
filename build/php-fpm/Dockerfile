@@ -1,4 +1,8 @@
-FROM php:8.2-fpm-buster
+FROM php:8.2-fpm-bullseye
+
+# Use HTTPS mirrors for Debian
+RUN sed -i 's|http://deb.debian.org|https://deb.debian.org|g' /etc/apt/sources.list \
+    && sed -i 's|http://security.debian.org|https://security.debian.org|g' /etc/apt/sources.list
 
 RUN apt-get update && apt-get install -y \
     libmemcached-dev \

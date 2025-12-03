@@ -339,10 +339,26 @@
                             @endforeach
                         </div>
                         
+                        <!-- Coupon Code Section -->
+                        <div class="coupon-section">
+                            <div class="coupon-input-group">
+                                <input type="text" id="couponCode" name="coupon_code" class="coupon-input" placeholder="Enter coupon code">
+                                <button type="button" id="applyCouponBtn" class="btn btn-outline coupon-btn">
+                                    Apply
+                                </button>
+                            </div>
+                            <div id="couponMessage" class="coupon-message"></div>
+                        </div>
+                        
                         <div class="order-totals">
                             <div class="total-row">
                                     <span class="total-label">Subtotal ({{ count($cartItems) }} items)</span>
                                     <span class="total-value" id="orderSubtotal">E£ {{ number_format($totalPrice, 0) }}</span>
+                            </div>
+                                
+                            <div class="total-row" id="discountRow" style="display: none;">
+                                    <span class="total-label">Discount</span>
+                                    <span class="total-value" id="discountAmount" style="color: #10b981;">-E£ 0</span>
                             </div>
                                 
                             <div class="total-row">
@@ -401,4 +417,140 @@
             @endif
         </div>
     </section>
+
+    @push('scripts')
+    <script>
+        $(document).ready(function() {
+            let appliedCoupon = null;
+            let appliedDiscount = 0;
+            const originalSubtotal = {{ $totalPrice }};
+            const shippingCost = 70;
+
+            // Coupon validation and application
+            $('#applyCouponBtn').on('click', function() {
+                const couponCode = $('#couponCode').val().trim();
+                const phoneNumber = $('#phone').val().trim();
+
+                if (!couponCode) {
+                    showCouponMessage('Please enter a coupon code.', 'error');
+                    return;
+                }
+
+                if (!phoneNumber) {
+                    showCouponMessage('Please enter your phone number first.', 'error');
+                    return;
+                }
+
+                // Disable button during request
+                const $btn = $(this);
+                $btn.prop('disabled', true).text('Applying...');
+
+                $.ajax({
+                    url: '{{ route("coupon.validate") }}',
+                    method: 'POST',
+                    data: {
+                        code: couponCode,
+                        phone: phoneNumber,
+                        subtotal: originalSubtotal,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            appliedCoupon = couponCode;
+                            appliedDiscount = parseFloat(response.discount);
+                            
+                            // Update order summary
+                            updateOrderSummary(appliedDiscount);
+                            
+                            // Show success message
+                            showCouponMessage(response.message, 'success');
+                            
+                            // Disable coupon input
+                            $('#couponCode').prop('disabled', true);
+                            $btn.prop('disabled', true).text('Applied');
+                        } else {
+                            showCouponMessage(response.message, 'error');
+                            appliedCoupon = null;
+                            appliedDiscount = 0;
+                            updateOrderSummary(0);
+                        }
+                    },
+                    error: function(xhr) {
+                        let errorMessage = 'An error occurred. Please try again.';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        showCouponMessage(errorMessage, 'error');
+                        appliedCoupon = null;
+                        appliedDiscount = 0;
+                        updateOrderSummary(0);
+                    },
+                    complete: function() {
+                        $btn.prop('disabled', false).text('Apply');
+                    }
+                });
+            });
+
+            // Allow Enter key to apply coupon
+            $('#couponCode').on('keypress', function(e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    $('#applyCouponBtn').click();
+                }
+            });
+
+            // Update order summary with discount
+            function updateOrderSummary(discount) {
+                const subtotal = originalSubtotal;
+                const discountAmount = discount;
+                const total = subtotal - discountAmount + shippingCost;
+
+                // Update discount row
+                if (discountAmount > 0) {
+                    $('#discountRow').show();
+                    $('#discountAmount').text('-E£ ' + Math.round(discountAmount).toLocaleString());
+                } else {
+                    $('#discountRow').hide();
+                }
+
+                // Update total
+                $('#orderTotal').text('E£ ' + Math.round(total).toLocaleString());
+            }
+
+            // Show coupon message
+            function showCouponMessage(message, type) {
+                const $messageDiv = $('#couponMessage');
+                $messageDiv.removeClass('success error').addClass(type + ' show');
+                
+                let icon = '';
+                if (type === 'success') {
+                    icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 12l2 2 4-4"/></svg>';
+                } else {
+                    icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>';
+                }
+                
+                $messageDiv.html(icon + '<span>' + message + '</span>');
+
+                // Auto-hide success messages after 5 seconds
+                if (type === 'success') {
+                    setTimeout(function() {
+                        $messageDiv.removeClass('show');
+                    }, 5000);
+                }
+            }
+
+            // Ensure coupon code is included in form submission
+            $('#checkoutForm').on('submit', function() {
+                if (appliedCoupon) {
+                    // Add hidden input for coupon code if not already present
+                    if ($('#coupon_code_hidden').length === 0) {
+                        $(this).append('<input type="hidden" name="coupon_code" id="coupon_code_hidden" value="' + appliedCoupon + '">');
+                    } else {
+                        $('#coupon_code_hidden').val(appliedCoupon);
+                    }
+                }
+            });
+        });
+    </script>
+    @endpush
 @endsection

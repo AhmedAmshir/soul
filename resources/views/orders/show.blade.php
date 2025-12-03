@@ -8,6 +8,26 @@
             {{ session('success') }}
         </div>
     @endif
+
+    @if(isset($showCouponNotification) && $showCouponNotification && $couponCode)
+        <div class="alert alert-info alert-dismissible fade show" role="alert" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <svg style="width: 24px; height: 24px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M9 12l2 2 4-4"/>
+                </svg>
+                <div style="flex: 1;">
+                    <strong style="font-size: 16px; display: block; margin-bottom: 4px;">📧 Send Coupon to Customer</strong>
+                    <p style="margin: 0; font-size: 14px;">
+                        The customer has not used their coupon code yet. Please send them the coupon code <strong>{{ $couponCode }}</strong> when this order is shipped. 
+                        The coupon is still valid and ready to be sent.
+                    </p>
+                </div>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close" style="opacity: 0.8;"></button>
+        </div>
+    @endif
+
     <!-- Order Summary -->
     <div class="card mb-4">
         <div class="card-header bg-dark text-white">
@@ -18,6 +38,7 @@
                 <div class="col-md-6">
                     <p><strong>Order Number:</strong> {{ $order->order_number }}</p>
                     <p><strong>Order Date:</strong> {{ $order->created_at->format('F j, Y H:i:s') }}</p>
+                    <p><strong>Payment Method:</strong> {{ strtoupper($order->payment_method) }}</p>
                     <p><strong>Status:</strong>
                         <span class="badge 
                             @if($order->status === 'pending') bg-secondary
@@ -29,11 +50,22 @@
                             {{ ucfirst(str_replace('_', ' ', $order->status)) }}
                         </span>
                     </p>
+                    <p><strong>Coupon Code:</strong> 
+                        @if($order->coupon)
+                            <span style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 4px 12px; border-radius: 6px; font-weight: 600; display: inline-block;">
+                                {{ $order->coupon->code }}
+                            </span>
+                        @else
+                            N/A
+                        @endif
+                    </p>
                 </div>
                 <div class="col-md-6">
-                        <p><strong>Payment Method:</strong> {{ strtoupper($order->payment_method) }}</p>
+                        
                         <p><strong>Shipping Method:</strong> {{ ucfirst($order->shipping_method) }}</p>
                         <p><strong>Shipping Cost:</strong> <span id="shipping">E£ 70</span></p>
+                        <p><strong>Discount Amount:</strong> E£ {{ number_format($order->discount_amount, 0) }}</p>
+                        <p><strong>Subtotal Amount:</strong> E£ {{ number_format($order->subtotal_amount, 0) }}</p>
                         <p><strong>Total Amount:</strong> E£ {{ number_format($order->total_amount, 0) }}</p>
                     </div>
             </div>
