@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'first_order_code' => 'WELCOME10',
+    'first_order_code' => 'Thankyou10',
 ];
