@@ -139,9 +139,13 @@
                             <span class="total-label">Shipping</span>
                             <span class="total-value" id="shipping">E£ {{ config('app.shipping_fee') }}</span>
                         </div>
+                        <div class="total-row">
+                            <span class="total-label">Discount</span>
+                            <span class="total-value" style="color: #10b981;">- E£ {{ number_format($order->discount_amount, 0) }}</span>
+                        </div>
                         <div class="total-row total-final">
                             <span class="total-label">Total</span>
-                            <span class="total-value">E£ {{ number_format($order->subtotal_amount + config('app.shipping_fee'), 0) }}</span>
+                            <span class="total-value">E£ {{ number_format($order->total_amount, 0) }}</span>
                         </div>
                     </div>
                 </div>
