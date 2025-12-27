@@ -63,7 +63,7 @@
                 <div class="col-md-6">
                         
                         <p><strong>Shipping Method:</strong> {{ ucfirst($order->shipping_method) }}</p>
-                        <p><strong>Shipping Cost:</strong> <span id="shipping">E£ 70</span></p>
+                        <p><strong>Shipping Cost:</strong> <span id="shipping">E£ {{ config('app.shipping_fee') }}</span></p>
                         <p><strong>Discount Amount:</strong> E£ {{ number_format($order->discount_amount, 0) }}</p>
                         <p><strong>Subtotal Amount:</strong> E£ {{ number_format($order->subtotal_amount, 0) }}</p>
                         <p><strong>Total Amount:</strong> E£ {{ number_format($order->total_amount, 0) }}</p>

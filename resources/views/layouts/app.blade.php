@@ -149,6 +149,10 @@
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Global configuration variables
+        window.shippingFee = {{ config('app.shipping_fee') }};
+    </script>
     <!-- <script src="{{ asset('js/soul-script.js') }}"></script> -->
     <script src="{{ asset('js/custom.js') }}"></script>
     @stack('scripts')

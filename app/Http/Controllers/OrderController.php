@@ -155,7 +155,7 @@ class OrderController extends Controller {
                 }
             }
 
-            $finalTotal = $subtotalAmount - $discountAmount + 70; // Add shipping cost
+            $finalTotal = $subtotalAmount - $discountAmount + config('app.shipping_fee'); // Add shipping cost
 
             $order = Order::create([
                 'order_number' => 'SO' . Str::upper(Str::random(10)),
@@ -163,7 +163,7 @@ class OrderController extends Controller {
                 'shipping_address_id' => $address->id,
                 'billing_address_id' => $address->id,
                 'shipping_method' => 'courier',
-                'shipping_cost' => 70,
+                'shipping_cost' => config('app.shipping_fee'),
                 'payment_method' => $request->payment_method,
                 'subtotal_amount' => $subtotalAmount,
                 'discount_amount' => $discountAmount,

@@ -164,12 +164,12 @@
                                 
                                 <div class="summary-row">
                                     <span class="summary-label">Shipping</span>
-                                    <span class="summary-value" id="shipping">E£ 70</span>
+                                    <span class="summary-value" id="shipping">E£ {{ config('app.shipping_fee') }}</span>
                                     <!-- <span class="summary-value shipping-free">
                                         <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                             <path d="M9 12l2 2 4-4"/>
                                         </svg>
-                                        E£ 70 
+                                        E£ {{ config('app.shipping_fee') }} 
                                     </span> -->
                                 </div>
                                 
@@ -182,7 +182,7 @@
                                 
                                 <div class="summary-row total-row">
                                     <span class="summary-label">Total</span>
-                                    <span class="summary-value total-value" id="total">E£ {{ number_format($totalPrice + 70, 0) }}</span>
+                                    <span class="summary-value total-value" id="total">E£ {{ number_format($totalPrice + config('app.shipping_fee'), 0) }}</span>
                                 </div>
                             </div>
                             

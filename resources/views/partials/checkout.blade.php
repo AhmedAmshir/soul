@@ -363,7 +363,7 @@
                                 
                             <div class="total-row">
                                     <span class="total-label">Shipping</span>
-                                    <span class="total-value" id="shipping">E£ 70</span>
+                                    <span class="total-value" id="shipping">E£ {{ config('app.shipping_fee') }}</span>
 
                                     <!-- <span class="total-value shipping-free" id="shipping">
                                         <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -382,7 +382,7 @@
                                 
                                 <div class="total-row total-final">
                                     <span class="total-label">Total</span>
-                                    <span class="total-value total-amount" id="orderTotal">E£ {{ number_format($totalPrice + 70, 0) }}</span>
+                                    <span class="total-value total-amount" id="orderTotal">E£ {{ number_format($totalPrice + config('app.shipping_fee'), 0) }}</span>
                                 </div>
                             </div>
                             
@@ -424,7 +424,7 @@
             let appliedCoupon = null;
             let appliedDiscount = 0;
             const originalSubtotal = {{ $totalPrice }};
-            const shippingCost = 70;
+            const shippingCost = {{ config('app.shipping_fee') }};
 
             // Coupon validation and application
             $('#applyCouponBtn').on('click', function() {

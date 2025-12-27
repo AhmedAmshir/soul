@@ -131,6 +131,27 @@ $(document).ready(function () {
 
 });
 
+// Helper function to get shipping cost from global variable or DOM
+function getShippingCost() {
+    // First try to get from global variable (set in layout)
+    if (typeof window.shippingFee !== 'undefined') {
+        return window.shippingFee;
+    }
+    
+    // Fallback: try to extract from DOM element
+    const shippingElement = document.getElementById('shipping');
+    if (shippingElement) {
+        const shippingText = shippingElement.textContent.trim();
+        const match = shippingText.match(/E£\s*(\d+)/);
+        if (match) {
+            return parseFloat(match[1]);
+        }
+    }
+    
+    // Default fallback value
+    return 80;
+}
+
 function updateTotalPrice() {
 
     const quantityInput = document.getElementById('product-quanity');
@@ -203,7 +224,7 @@ function updateCartQuantity(productId, newQuantity) {
                 // Update cart summary with server data
                 const subtotalElement = document.getElementById('subtotal');
                 const totalElement = document.getElementById('total');
-                const shippingCost = 70;
+                const shippingCost = getShippingCost();
                 const totalWithShipping = data.cart_total_price + shippingCost;
                 
                 if (subtotalElement) subtotalElement.textContent = `E£ ${Math.round(data.cart_total_price)}`;
@@ -473,7 +494,7 @@ function updateCartSummary() {
     // or fetch updated data from the server
     const cartItems = document.querySelectorAll('.cart-item-card');
     let subtotal = 0;
-    const shippingCost = 70; // Fixed shipping cost
+    const shippingCost = getShippingCost(); // Fixed shipping cost
     
     cartItems.forEach(item => {
         const priceElement = item.querySelector('.item-price');

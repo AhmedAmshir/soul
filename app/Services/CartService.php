@@ -40,8 +40,8 @@ class CartService
         return [
             'cartItems' => $cartItems,
             'totalPrice' => $totalPrice,
-            'totalPriceWithShipping' => $totalPrice + 70,
-            'shippingCost' => 70,
+            'totalPriceWithShipping' => $totalPrice + config('app.shipping_fee'),
+            'shippingCost' => config('app.shipping_fee'),
             'cartItemsCount' => $cartItemsCount,
         ];
     }
