@@ -339,96 +339,115 @@ function removeFromCart(productId) {
     }
 }
 
+// Show clear cart confirmation modal
 function clearCart() {
-    if (confirm('Are you sure you want to clear all items from your cart?')) {
-        if (typeof clearCartUrl !== 'undefined') {
-            // Use server-side clear cart functionality
-            fetch(clearCartUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    // Update cart count
-                    updateCartCount(0);
-                    
-                    // Update cart items count in header
-                    const cartItemsCount = document.getElementById('cart-items-count');
-                    if (cartItemsCount) {
-                        cartItemsCount.textContent = '0';
-                    }
-                    
-                    // Remove all cart items from DOM
-                    const cartContent = document.getElementById('cartContent');
-                    if (cartContent) {
-                        cartContent.innerHTML = '';
-                    }
-                    
-                    // Show empty cart state
-                    const emptyCart = document.getElementById('emptyCart');
-                    const cartSummary = document.getElementById('cartSummary');
-                    
-                    if (emptyCart) emptyCart.style.display = 'block';
-                    if (cartSummary) cartSummary.style.display = 'none';
-                    
-                    // Update cart total price display
-                    const cartTotalPrice = document.querySelector('.cart-total-price');
-                    if (cartTotalPrice) {
-                        cartTotalPrice.textContent = 'E£0.00';
-                    }
-                    
-                    // Update summary totals
-                    const subtotalElement = document.getElementById('subtotal');
-                    const totalElement = document.getElementById('total');
-                    if (subtotalElement) subtotalElement.textContent = 'E£0.00';
-                    if (totalElement) totalElement.textContent = 'E£0.00';
-                    
-                    console.log('Cart cleared successfully');
-                } else {
-                    alert('Error clearing cart: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error clearing cart:', error);
-                alert('Error clearing cart. Please try again.');
-            });
-        } else {
-            // Fallback: remove items one by one (client-side only)
-            const cartItems = document.querySelectorAll('.cart-item-card');
-            const itemIds = Array.from(cartItems).map(item => {
-                const input = item.querySelector('input[data-product-id]');
-                return input ? input.getAttribute('data-product-id') : null;
-            }).filter(id => id !== null);
-            
-            if (itemIds.length === 0) {
-                return;
+    const modal = document.getElementById('clearCartModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+}
+
+// Close the clear cart modal
+function closeClearCartModal() {
+    const modal = document.getElementById('clearCartModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+}
+
+// Confirm and execute cart clearing
+function confirmClearCart() {
+    closeClearCartModal(); // Close modal first
+    
+    if (typeof clearCartUrl !== 'undefined') {
+        // Use server-side clear cart functionality
+        fetch(clearCartUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
-            
-            // Remove items sequentially
-            let removedCount = 0;
-            itemIds.forEach((itemId, index) => {
-                setTimeout(() => {
-                    removeFromCart(itemId);
-                    removedCount++;
-                    
-                    // If this is the last item, reload the page to show empty state
-                    if (removedCount === itemIds.length) {
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 500);
-                    }
-                }, index * 100);
-            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Update cart count
+                updateCartCount(0);
+                
+                // Update cart items count in header
+                const cartItemsCount = document.getElementById('cart-items-count');
+                if (cartItemsCount) {
+                    cartItemsCount.textContent = '0';
+                }
+                
+                // Remove all cart items from DOM
+                const cartContent = document.getElementById('cartContent');
+                if (cartContent) {
+                    cartContent.innerHTML = '';
+                }
+                
+                // Show empty cart state
+                const emptyCart = document.getElementById('emptyCart');
+                const cartSummary = document.getElementById('cartSummary');
+                
+                if (emptyCart) emptyCart.style.display = 'block';
+                if (cartSummary) cartSummary.style.display = 'none';
+                
+                // Update cart total price display
+                const cartTotalPrice = document.querySelector('.cart-total-price');
+                if (cartTotalPrice) {
+                    cartTotalPrice.textContent = 'E£0.00';
+                }
+                
+                // Update summary totals
+                const subtotalElement = document.getElementById('subtotal');
+                const totalElement = document.getElementById('total');
+                if (subtotalElement) subtotalElement.textContent = 'E£0.00';
+                if (totalElement) totalElement.textContent = 'E£0.00';
+                
+                console.log('Cart cleared successfully');
+            } else {
+                alert('Error clearing cart: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error clearing cart:', error);
+            alert('Error clearing cart. Please try again.');
+        });
+    } else {
+        // Fallback: remove items one by one (client-side only)
+        const cartItems = document.querySelectorAll('.cart-item-card');
+        const itemIds = Array.from(cartItems).map(item => {
+            const input = item.querySelector('input[data-product-id]');
+            return input ? input.getAttribute('data-product-id') : null;
+        }).filter(id => id !== null);
+        
+        if (itemIds.length === 0) {
+            return;
         }
+        
+        // Remove items sequentially
+        let removedCount = 0;
+        itemIds.forEach((itemId, index) => {
+            setTimeout(() => {
+                removeFromCart(itemId);
+                removedCount++;
+                
+                // If this is the last item, reload the page to show empty state
+                if (removedCount === itemIds.length) {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 500);
+                }
+            }, index * 100);
+        });
     }
 }
 
@@ -703,5 +722,23 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (window.location.pathname.includes('checkout')) {
         initCheckoutPage();
+    }
+    
+    // Setup modal close on overlay click and ESC key
+    const clearCartModal = document.getElementById('clearCartModal');
+    if (clearCartModal) {
+        // Close modal when clicking on overlay (but not on modal content)
+        clearCartModal.addEventListener('click', function(e) {
+            if (e.target === clearCartModal) {
+                closeClearCartModal();
+            }
+        });
+        
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && clearCartModal.style.display === 'flex') {
+                closeClearCartModal();
+            }
+        });
     }
 });
