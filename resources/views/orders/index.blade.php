@@ -128,7 +128,7 @@
                     <div class="order-totals">
                         <div class="total-item">
                             <span class="total-label">Total Amount</span>
-                            <span class="total-value">E£{{ number_format($order->total_amount, 0) }}</span>
+                            <span class="total-value">LE{{ number_format($order->total_amount, 0) }}</span>
                         </div>
                         <div class="total-item">
                             <span class="total-label">Payment Method</span>
@@ -235,7 +235,7 @@
                                 </div>
                             </td>
                             <td class="total-cell">
-                                <span class="total-amount">E£{{ number_format($order->total_amount, 0) }}</span>
+                                <span class="total-amount">LE{{ number_format($order->total_amount, 0) }}</span>
                             </td>
                             <td class="status-cell">
                                 <span class="status-badge status-{{ strtolower($order->status) }}">

@@ -39,7 +39,7 @@ $(document).ready(function () {
                 if (response.success) {
 
                     $('#cart-total-items').text(response.cart_total_items);
-                    $('.cart-total-price').text('E£' + Math.round(response.cart_total_price));
+                    $('.cart-total-price').text('LE' + Math.round(response.cart_total_price));
                     $('#cartCount').text(response.cart_total_count);
                     $('.cart-dropdown-menu').html(response.cart_html);
                 }
@@ -98,7 +98,7 @@ $(document).ready(function () {
     //                 $('#cart-total-items').text(response.cart_total_items);
     //                 $('.cart-total-price').text(response.cart_total_price);
     //                 $('#cart-item-quantity-' + cartItemId).text(quantity);
-    //                 $('#cart-item-total-price-' + cartItemId).text('E£' + response.item_total_price);
+    //                 $('#cart-item-total-price-' + cartItemId).text('LE' + response.item_total_price);
     //             }
     //         },
     //         error: function (xhr) {
@@ -142,7 +142,7 @@ function getShippingCost() {
     const shippingElement = document.getElementById('shipping');
     if (shippingElement) {
         const shippingText = shippingElement.textContent.trim();
-        const match = shippingText.match(/E£\s*(\d+)/);
+        const match = shippingText.match(/LE\s*(\d+)/);
         if (match) {
             return parseFloat(match[1]);
         }
@@ -164,7 +164,7 @@ function updateTotalPrice() {
         const total = quantity * unitPrice;
         
         // Update the price display to show total without shipping
-        totalPriceElement.textContent = `E£ ${Math.round(total)}`;
+        totalPriceElement.textContent = `${Math.round(total)} LE`;
     }
 }
 
@@ -218,7 +218,7 @@ function updateCartQuantity(productId, newQuantity) {
                 // Update individual item total
                 const itemTotalElement = document.querySelector(`span[data-item-id="${productId}"]`);
                 if (itemTotalElement && data.item_total_price) {
-                    itemTotalElement.textContent = `E£ ${Math.round(data.item_total_price)}`;
+                    itemTotalElement.textContent = `${Math.round(data.item_total_price)} LE`;
                 }
                 
                 // Update cart summary with server data
@@ -227,13 +227,13 @@ function updateCartQuantity(productId, newQuantity) {
                 const shippingCost = getShippingCost();
                 const totalWithShipping = data.cart_total_price + shippingCost;
                 
-                if (subtotalElement) subtotalElement.textContent = `E£ ${Math.round(data.cart_total_price)}`;
-                if (totalElement) totalElement.textContent = `E£ ${Math.round(totalWithShipping)}`;
+                if (subtotalElement) subtotalElement.textContent = `${Math.round(data.cart_total_price)} LE`;
+                if (totalElement) totalElement.textContent = `${Math.round(totalWithShipping)} LE`;
                 
                 // Update cart total price display
                 const cartTotalPrice = document.querySelector('.cart-total-price');
                 if (cartTotalPrice) {
-                    cartTotalPrice.textContent = 'E£' + Math.round(data.cart_total_price);
+                    cartTotalPrice.textContent = `${Math.round(data.cart_total_price)} LE`;
                 }
             } else {
                 alert('Error updating cart: ' + data.message);
@@ -303,7 +303,7 @@ function removeFromCart(productId) {
                 // Update cart total price display
                 const cartTotalPrice = document.querySelector('.cart-total-price');
                 if (cartTotalPrice) {
-                    cartTotalPrice.textContent = 'E£' + Math.round(data.cart_total_price);
+                    cartTotalPrice.textContent = 'LE' + Math.round(data.cart_total_price);
                 }
                 // Check if cart is empty and show empty state
                 const cartContent = document.getElementById('cartContent');
@@ -403,14 +403,14 @@ function confirmClearCart() {
                 // Update cart total price display
                 const cartTotalPrice = document.querySelector('.cart-total-price');
                 if (cartTotalPrice) {
-                    cartTotalPrice.textContent = 'E£0.00';
+                    cartTotalPrice.textContent = '0.00 LE';
                 }
                 
                 // Update summary totals
                 const subtotalElement = document.getElementById('subtotal');
                 const totalElement = document.getElementById('total');
-                if (subtotalElement) subtotalElement.textContent = 'E£0.00';
-                if (totalElement) totalElement.textContent = 'E£0.00';
+                if (subtotalElement) subtotalElement.textContent = '0.00 LE';
+                if (totalElement) totalElement.textContent = '0.00 LE';
                 
                 console.log('Cart cleared successfully');
             } else {
@@ -521,14 +521,14 @@ function updateCartSummary() {
         const itemTotalElement = item.querySelector('.item-total');
         
         if (priceElement && quantityInput) {
-            const price = parseFloat(priceElement.textContent.replace('E£', ''));
+            const price = parseFloat(priceElement.textContent.replace('LE', ''));
             const quantity = parseInt(quantityInput.value) || 0;
             const itemTotal = price * quantity;
             subtotal += itemTotal;
             
             // Update individual item total
             if (itemTotalElement) {
-                itemTotalElement.textContent = `E£ ${Math.round(itemTotal)}`;
+                itemTotalElement.textContent = `${Math.round(itemTotal)} LE`;
             }
         }
     });
@@ -537,10 +537,10 @@ function updateCartSummary() {
     const itemCount = cartItems.length;
     
     if (subtotalElement) {
-        subtotalElement.textContent = `E£ ${Math.round(subtotal)}`;
+        subtotalElement.textContent = `${Math.round(subtotal)} LE`;
     }
-    if (shippingElement) shippingElement.textContent = `E£ ${shippingCost}`;
-    if (totalElement) totalElement.textContent = `E£ ${Math.round(total)}`;
+    if (shippingElement) shippingElement.textContent = `${shippingCost} LE`;
+    if (totalElement) totalElement.textContent = `${Math.round(total)} LE`;
 }
 
 // Checkout Step Navigation

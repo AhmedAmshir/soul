@@ -8,7 +8,7 @@
             </a>
             <div class="cart-item-details">
                 <h6><a href="{{ route('product', ['asin' => $item['asin'], 'slug' => Str::slug($item['slug']) ]) }}">{{ $item['smell'] }}</a></h6>
-                <p><span id="cart-item-quantity-{{ $itemId }}">{{ $item['quantity'] }}</span> x <span class="price">E£{{ $item['price'] }}</span></p>
+                <p><span id="cart-item-quantity-{{ $itemId }}">{{ $item['quantity'] }}</span> x <span class="price">LE{{ $item['price'] }}</span></p>
             </div>
             <div class="cart-item-close">
                 <span class="lnr lnr-cross"></span>
@@ -17,7 +17,7 @@
     @endforeach
 
     <li class="cart-total">
-        <span>Total: E£<strong class="cart-total-price"> {{ $totalPrice }} </strong></span>
+        <span>Total: LE<strong class="cart-total-price"> {{ $totalPrice }} </strong></span>
         <a href="{{ route('cart.view') }}" class="btn-cart bg-soul text-dark">View Cart</a>
     </li>
 @endif

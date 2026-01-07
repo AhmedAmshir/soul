@@ -80,7 +80,7 @@ class CouponService
         if ($coupon->min_order_amount && $subtotal < $coupon->min_order_amount) {
             return [
                 'valid' => false,
-                'message' => 'Minimum order amount of E£ ' . number_format($coupon->min_order_amount, 0) . ' required.',
+                'message' => 'Minimum order amount of LE ' . number_format($coupon->min_order_amount, 0) . ' required.',
                 'discount' => null,
                 'coupon' => $coupon,
             ];

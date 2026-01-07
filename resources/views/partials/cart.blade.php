@@ -66,59 +66,18 @@
                         <div class="cart-items" id="cartContent">
                             @foreach($cartItems as $itemId => $item)
                                 <div class="cart-item-card">
-                                    <div class="cart-item-image">
-                                        <img src="{{ asset('storage/products/' . $item['image']) }}" alt="{{ $item['smell'] }}" />
-                                        <div class="item-badge">
-                                            <span>{{ $item['size_ml'] }}ml</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="cart-item-details">
-                                        <div class="item-header">
-                                            <h3 class="item-name">{{ $item['product_name'] }}</h3>
-                                            <button class="remove-item-btn" onclick="removeFromCart('{{ $itemId }}')" aria-label="Remove item">
-                                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                    <path d="M18 6L6 18"/>
-                                                    <path d="M6 6l12 12"/>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        
-                                        <!-- <p class="item-description">{{ $item['smell'] }}</p> -->
-                                        
-                                        <!-- <div class="item-specs">
-                                            <span class="spec-item">
-                                                <svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                                </svg>
-                                                Premium Quality
-                                            </span>
-                                            <span class="spec-item">
-                                                <svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                    <path d="M9 12l2 2 4-4"/>
-                                                    <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
-                                                    <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
-                                                </svg>
-                                                Natural Ingredients
-                                            </span>
-                                        </div> -->
-                                        
-                                        <div class="item-price-section">
-                                            <div class="price-info">
-                                                <span class="item-description">{{ $item['smell'] }}</span>
-                                                <!-- <span class="price-label">Price per unit:</span> -->
-                                                <span class="item-price">E£ {{ number_format($item['price'], 0) }}</span>
-                                            </div>
-                                            <div class="total-price">
-                                                <span class="total-label">Total:</span>
-                                                <span class="item-total" data-item-id="{{ $itemId }}">E£ {{ number_format($item['price'] * $item['quantity'], 0) }}</span>
+                                    <div class="cart-item-image-wrapper">
+                                        <div class="cart-item-image">
+                                            <img src="{{ asset('storage/products/' . $item['image']) }}" alt="{{ $item['smell'] }}" />
+                                            <div class="item-badge">
+                                                <span>{{ $item['size_ml'] }}ml</span>
                                             </div>
                                         </div>
+                                        <span class="item-price">{{ number_format($item['price'], 0) }} LE</span>
                                     </div>
                                     
-                                    <div class="cart-item-controls">
-                                        <div class="quantity-section">
-                                            <!-- <label class="quantity-label">Quantity</label> -->
+                                    <div class="cart-item-content">
+                                        <div class="item-controls-row">
                                             <div class="quantity-controls">
                                                 <button type="button" class="quantity-btn quantity-decrease" onclick="decrementCartQuantity('{{ $itemId }}')" aria-label="Decrease quantity">
                                                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -143,9 +102,20 @@
                                                     </svg>
                                                 </button>
                                             </div>
-                                            <!-- <div class="quantity-limit">Max: 10 units</div> -->
+                                            
+                                            <div class="total-price">
+                                                <span class="total-label">Total:</span>
+                                                <span class="item-total" data-item-id="{{ $itemId }}">{{ number_format($item['price'] * $item['quantity'], 0) }} LE</span>
+                                            </div>
                                         </div>
                                     </div>
+                                    
+                                    <button class="remove-item-btn" onclick="removeFromCart('{{ $itemId }}')" aria-label="Remove item">
+                                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M18 6L6 18"/>
+                                            <path d="M6 6l12 12"/>
+                                        </svg>
+                                    </button>
                                 </div>
                             @endforeach
                         </div>
@@ -159,17 +129,17 @@
                             <div class="summary-details">
                                 <div class="summary-row">
                                     <span class="summary-label">Subtotal ({{ count($cartItems) }} items)</span>
-                                    <span class="summary-value" id="subtotal">E£ {{ number_format($totalPrice, 0) }}</span>
+                                    <span class="summary-value" id="subtotal">{{ number_format($totalPrice, 0) }} LE</span>
                                 </div>
                                 
                                 <div class="summary-row">
                                     <span class="summary-label">Shipping</span>
-                                    <span class="summary-value" id="shipping">E£ {{ config('app.shipping_fee') }}</span>
+                                    <span class="summary-value" id="shipping">{{ config('app.shipping_fee') }} LE</span>
                                     <!-- <span class="summary-value shipping-free">
                                         <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                             <path d="M9 12l2 2 4-4"/>
                                         </svg>
-                                        E£ {{ config('app.shipping_fee') }} 
+                                        {{ config('app.shipping_fee') }} LE 
                                     </span> -->
                                 </div>
                                 
@@ -182,7 +152,7 @@
                                 
                                 <div class="summary-row total-row">
                                     <span class="summary-label">Total</span>
-                                    <span class="summary-value total-value" id="total">E£ {{ number_format($totalPrice + config('app.shipping_fee'), 0) }}</span>
+                                    <span class="summary-value total-value" id="total">{{ number_format($totalPrice + config('app.shipping_fee'), 0) }} LE</span>
                                 </div>
                             </div>
                             

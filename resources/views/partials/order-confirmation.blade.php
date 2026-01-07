@@ -74,11 +74,11 @@
                                     <p class="item-variation">{{ $item->variation->description }}</p>
                                     <div class="item-meta">
                                         <span class="item-quantity">Qty: {{ $item->quantity }}</span>
-                                        <span class="item-price">E£{{ number_format($item->price, 0) }}</span>
+                                        <span class="item-price">{{ number_format($item->price, 0) }} LE</span>
                                     </div>
                                 </div>
                                 <div class="item-total">
-                                    E£{{ number_format($item->quantity * $item->price, 0) }}
+                                    {{ number_format($item->quantity * $item->price, 0) }} LE
                                 </div>
                             </div>
                         @endforeach
@@ -133,19 +133,21 @@
                     <div class="order-totals">
                         <div class="total-row">
                             <span class="total-label">Subtotal</span>
-                            <span class="total-value">E£ {{ number_format($order->subtotal_amount, 0) }}</span>
+                            <span class="total-value">{{ number_format($order->subtotal_amount, 0) }} LE</span>
                         </div>
                         <div class="total-row">
                             <span class="total-label">Shipping</span>
-                            <span class="total-value" id="shipping">E£ {{ config('app.shipping_fee') }}</span>
+                            <span class="total-value" id="shipping">{{ config('app.shipping_fee') }} LE</span>
                         </div>
-                        <div class="total-row">
-                            <span class="total-label">Discount</span>
-                            <span class="total-value" style="color: #10b981;">- E£ {{ number_format($order->discount_amount, 0) }}</span>
-                        </div>
+                        @if($order->discount_amount > 0)
+                            <div class="total-row">
+                                <span class="total-label">Discount</span>
+                                <span class="total-value" style="color: #10b981;">- {{ number_format($order->discount_amount, 0) }} LE</span>
+                            </div>
+                        @endif
                         <div class="total-row total-final">
                             <span class="total-label">Total</span>
-                            <span class="total-value">E£ {{ number_format($order->total_amount, 0) }}</span>
+                            <span class="total-value">{{ number_format($order->total_amount, 0) }} LE</span>
                         </div>
                     </div>
                 </div>

@@ -59,7 +59,7 @@
                     <div class="selected-scent" id="selectedScentDisplay">
                         <div class="scent-header">
                             <h3 id="selectedScentName">{{ $variation->smell }}</h3>
-                            <div class="scent-price" id="selectedScentPrice">E£ {{ $variation->price }}</div>
+                            <div class="scent-price" id="selectedScentPrice">{{ $variation->price }} LE</div>
                             <!-- <div class="selected-badge">
                                 <span id="selectedQuantity">1</span> Selected
                             </div> -->
@@ -79,6 +79,28 @@
                         </div>
                         
                         <button class="add-to-cart add-to-cart-btn">Add to Cart</button>
+                    </div>
+
+                    <!-- Shipping Information -->
+                    <div class="shipping-info">
+                        <div class="shipping-item">
+                            <svg class="shipping-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z"/>
+                                <path d="M5 8h6"/>
+                            </svg>
+                            <span class="shipping-text">Shipping calculated at checkout.</span>
+                        </div>
+                        <div class="shipping-item">
+                            <svg class="shipping-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            <span class="delivery-date">
+                                Expected delivery: <span id="expected-delivery-date"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -192,5 +214,36 @@
                 faqIcon.textContent = '+';
             }
         }
+
+        // Calculate and display expected delivery date range (3-5 days from today)
+        function calculateDeliveryDate() {
+            const today = new Date();
+            const minDate = new Date(today);
+            minDate.setDate(today.getDate() + 3);
+            const maxDate = new Date(today);
+            maxDate.setDate(today.getDate() + 5);
+            
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+            
+            const formatDate = (date) => {
+                const dayName = days[date.getDay()];
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = months[date.getMonth()];
+                const year = date.getFullYear();
+                return `${dayName}, ${day}/${month}/${year}`;
+            };
+            
+            const minFormatted = formatDate(minDate);
+            const maxFormatted = formatDate(maxDate);
+            
+            const deliveryDateElement = document.getElementById('expected-delivery-date');
+            if (deliveryDateElement) {
+                deliveryDateElement.textContent = `${minFormatted} - ${maxFormatted}`;
+            }
+        }
+
+        // Calculate delivery date when page loads
+        document.addEventListener('DOMContentLoaded', calculateDeliveryDate);
     </script>
 @endsection

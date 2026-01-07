@@ -63,10 +63,10 @@
                 <div class="col-md-6">
                         
                         <p><strong>Shipping Method:</strong> {{ ucfirst($order->shipping_method) }}</p>
-                        <p><strong>Shipping Cost:</strong> <span id="shipping">E£ {{ config('app.shipping_fee') }}</span></p>
-                        <p><strong>Discount Amount:</strong> <span style="color: red;">- E£ {{ number_format($order->discount_amount, 0) }}</span></p>
-                        <p><strong>Subtotal Amount:</strong> E£ {{ number_format($order->subtotal_amount, 0) }}</p>
-                        <p><strong>Total Amount:</strong> <span style="color: #10b981; font-weight: bold; font-size: 1.2rem;">E£ {{ number_format($order->total_amount, 0) }}</span></p>
+                        <p><strong>Shipping Cost:</strong> <span id="shipping">{{ config('app.shipping_fee') }} LE</span></p>
+                        <p><strong>Discount Amount:</strong> <span style="color: red;">- {{ number_format($order->discount_amount, 0) }} LE</span></p>
+                        <p><strong>Subtotal Amount:</strong> {{ number_format($order->subtotal_amount, 0) }} LE</p>
+                        <p><strong>Total Amount:</strong> <span style="color: #10b981; font-weight: bold; font-size: 1.2rem;">{{ number_format($order->total_amount, 0) }} LE</span></p>
                     </div>
             </div>
             <div class="row">
@@ -84,8 +84,8 @@
                             <tr>
                                 <td>{{ $item->variation->name }} - {{ $item->variation->smell }}</td>
                                 <td>{{ $item->quantity }}</td>
-                                <td>E£{{ number_format($item->price, 0) }}</td>
-                                <td>E£{{ number_format($item->quantity * $item->price, 0) }}</td>
+                                <td>{{ number_format($item->price, 0) }} LE</td>
+                                <td>{{ number_format($item->quantity * $item->price, 0) }} LE</td>
                             </tr>
                         @endforeach
                     </tbody>
