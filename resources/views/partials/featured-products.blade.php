@@ -48,7 +48,7 @@
                             </div>
                             <div class="product-info">
                                 <h3>{{ $variation->name }}</h3>
-                                <p>{!! $variation->description !!}</p>
+                                <p>{{ Str::limit(strip_tags($variation->description), 100, ' ...') }}</p>
                                 <div class="product-price">{{ number_format($variation->price, 0) }} LE</div>
                             </div>
                         </a>

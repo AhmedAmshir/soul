@@ -507,6 +507,10 @@ img {
     color: var(--foreground);
 }
 
+.product-info .product-price {
+    text-align: right;
+}
+
 .product-price {
     font-size: 20px;
     font-weight: bold;
