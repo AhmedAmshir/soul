@@ -409,6 +409,28 @@ img {
     line-height: 1.5;
 }
 
+.product-description {
+    color: var(--muted-foreground);
+    margin: 0 0 4px 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: calc(1.5em * 3);
+    margin-top: 5px !important;
+    margin-bottom: 10px !important;
+}
+
+.product-description * {
+    margin: 0;
+    padding: 0;
+    display: inline;
+}
+
 .product-price {
     font-size: 20px;
     font-weight: 600;
